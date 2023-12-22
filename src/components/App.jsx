@@ -1,8 +1,5 @@
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { SearchBar } from "./SearchBar/SearchBar";
-import { Loader } from "./Loader/Loader"
-import { Button } from "./Button/Button";
-import { Modal } from "./Modal/Modal";
 import css from "./App.module.css"
 import { Component } from "react";
 export class App extends Component  {
@@ -23,9 +20,7 @@ export class App extends Component  {
       <SearchBar onSubmit={ this.onSubmit} />
       <ImageGallery searchKey={this.state.searchKey} >
 
-      </ImageGallery>
-      
-      {/* <Loader isLoading={ } /> */}
+      </ImageGallery>        
     </div>
     )
     }
