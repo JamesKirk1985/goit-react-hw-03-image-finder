@@ -57,9 +57,7 @@ export class ImageGallery extends Component {
         page: this.state.page + 1
       })
       const data = await imgGetFunction(this.state.searchKey, this.state.page + 1)
-      console.log(this.state.page)
-      console.log(this.state)
-      this.setState({
+        this.setState({
         images: [...this.state.images, ...data.hits]
       })
     } catch (error) {
