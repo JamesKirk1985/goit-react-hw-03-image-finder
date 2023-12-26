@@ -15,7 +15,7 @@ export class App extends Component {
     isLoading: false,
     showModal: false,
     searchKey: '',
-    page: 1
+    page: 1   
   }
 
   componentDidUpdate(prevProps, prevState) {    
@@ -25,16 +25,15 @@ export class App extends Component {
   }
 
   getImages = async (key, page) => {    
-    try {
+      try {
       this.setState({
         isLoading: true
       })
       const data = await imgGetFunction(key, page)   
-        this.setState({
-        images: [...this.state.images, ...data.hits],
-        total: data.total,
-        totalHits: data.totalHits
-        })     
+        this.setState((prevState) => ({
+          images: [...prevState.images, ...data.hits],
+          loadMore: this.state.page < Math.ceil(data.totalHits / 12 )        
+        }) )    
     } catch (error) {
       console.log(error.message)
     } finally {
@@ -43,8 +42,10 @@ export class App extends Component {
 
   }
 
-  onSubmit = (event) => {
-    event.preventDefault();   
+  onSubmit = (event) => {    
+    event.preventDefault();
+    if (event.target.inputKey.value === this.state.searchKey) 
+      {return}
     this.setState({
       images:[],
       page: 1,
@@ -71,13 +72,13 @@ export class App extends Component {
     }
 
     render() {
-      const { images, total, page, showModal, bigImage, isLoading } = this.state;
+      const { images, showModal, bigImage, isLoading, loadMore } = this.state;
       return (
         <div className={css.App}>
           <SearchBar onSubmit={this.onSubmit} />
           <ImageGallery images={images} showModal={this.showModal}>
           </ImageGallery >
-          {images.length>0 && total > page * 12 && <Button loadMoreFunc={this.loadMoreFunc} />}
+          {images.length>0 && loadMore && <Button loadMoreFunc={this.loadMoreFunc} />}          
           {showModal && <Modal src={bigImage} close={this.closeModal} />}
           {isLoading && <Loader />}
         </div>
