@@ -20,31 +20,21 @@ export class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {    
     if (this.state.searchKey !== prevState.searchKey || this.state.page !== prevState.page) {      
-      this.getImages(this.state.searchKey, this.state.page, prevState)       
+      this.getImages(this.state.searchKey, this.state.page)       
     }
   }
 
-  getImages = async (key, page, prev) => {    
+  getImages = async (key, page) => {    
     try {
       this.setState({
         isLoading: true
       })
-      const data = await imgGetFunction(key, page)
-      if (key === prev.searchKey) {
+      const data = await imgGetFunction(key, page)   
         this.setState({
-        images: [...prev.images, ...data.hits],
+        images: [...this.state.images, ...data.hits],
         total: data.total,
         totalHits: data.totalHits
-        })
-      }
-      else {
-        this.setState({
-        images: [...data.hits],
-        total: data.total,
-        totalHits: data.totalHits
-        })
-      }
-      
+        })     
     } catch (error) {
       console.log(error.message)
     } finally {
@@ -56,6 +46,7 @@ export class App extends Component {
   onSubmit = (event) => {
     event.preventDefault();   
     this.setState({
+      images:[],
       page: 1,
       searchKey: event.target.inputKey.value
       })
